@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - Key Management System</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #3b4151;
+            background-color: #fafafa;
+        }
+        header {
+            background-color: #1c1d21;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .version {
+            color: #89bf04;
+            font-size: 14px;
+        }
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .base-info {
+            background-color: white;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .endpoint {
+            margin-bottom: 20px;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .endpoint-header {
+            display: flex;
+            background-color: #e7f0f7;
+            border: 1px solid #cccccc;
+            cursor: pointer;
+        }
+        .method {
+            padding: 10px 20px;
+            color: white;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .get {
+            background-color: #61affe;
+        }
+        .post {
+            background-color: #49cc90;
+        }
+        .put {
+            background-color: #fca130;
+        }
+        .delete {
+            background-color: #f93e3e;
+        }
+        .path {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            flex-grow: 1;
+        }
+        .description {
+            padding: 10px;
+            color: #555;
+            flex-grow: 2;
+        }
+        .endpoint-content {
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #cccccc;
+            border-top: none;
+        }
+        .parameters {
+            margin-top: 20px;
+        }
+        .parameter-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+        }
+        .response {
+            margin-top: 20px;
+        }
+        .schemas {
+            margin-top: 40px;
+        }
+        .schema {
+            margin-bottom: 20px;
+        }
+        .schema-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background-color: #f5f5f5;
+        }
+        .required {
+            color: #e53935;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        .tag {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #e7f0f7;
+            color: #3b4151;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .toggle-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            color: #3b4151;
+            cursor: pointer;
+            margin-left: auto;
+            font-size: 20px;
+            padding: 0 10px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Key Management System API</h1>
+        <span class="version">v1.0</span>
+    </header>
+
+    <div class="main-container">
+        <div class="base-info">
+            <h2>Base Information</h2>
+            <p><strong>Base URL:</strong> <code>https://keys-api.example.com/api</code></p>
+            <p>API for license key management. Supports activation, checking and refreshing of keys.</p>
+            <div>
+                <span class="tag">Format: JSON</span>
+                <span class="tag">Authorization: Bearer Token</span>
+            </div>
+        </div>
+
+        <!-- Endpoint: Activate key -->
+        <div class="endpoint">
+            <div class="endpoint-header" onclick="toggleEndpoint('activate')">
+                <div class="method post">POST</div>
+                <div class="path">/keys/activate</div>
+                <div class="description">Activate a license key</div>
+                <button class="toggle-btn">▼</button>
+            </div>
+            <div class="endpoint-content" id="activate">
+                <p>Activates a license key for the specified client. If the key is already active, returns the current status.</p>
+                
+                <div class="parameters">
+                    <div class="parameter-title">Request Parameters (JSON):</div>
+                    <pre><code>{
+  "keyId": "string",    // Key ID
+  "clientId": "string", // Client ID
+  "date": "string"      // Activation date (optional, ISO format)
+}</code></pre>
+                </div>
+                
+                <div class="response">
+                    <div class="parameter-title">Response (200 OK):</div>
+                    <pre><code>{
+  "keyId": "string",         // Key ID
+  "date": "string",          // Activation date
+  "status": "string",        // Status ("activated", "already_active", etc.)
+  "expirationDate": "string" // Expiration date
+}</code></pre>
+                </div>
+                
+                <div class="response">
+                    <div class="parameter-title">Response (404 Not Found):</div>
+                    <pre><code>{
+  "message": "Key not found"
+}</code></pre>
+                </div>
+                
+                <div class="response">
+                    <div class="parameter-title">Response (403 Forbidden):</div>
+                    <pre><code>{
+  "message": "Key does not belong to this client"
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Endpoint: Check key -->
+        <div class="endpoint">
+            <div class="endpoint-header" onclick="toggleEndpoint('check')">
+                <div class="method get">GET</div>
+                <div class="path">/keys/check/{keyId}/{clientId}</div>
+                <div class="description">Check key status</div>
+                <button class="toggle-btn">▼</button>
+            </div>
+            <div class="endpoint-content" id="check">
+                <p>Checks the current status of a key for the specified client.</p>
+                
+                <div class="parameters">
+                    <div class="parameter-title">Path Parameters:</div>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>keyId <span class="required">required</span></td>
+                            <td>string</td>
+                            <td>License key ID</td>
+                        </tr>
+                        <tr>
+                            <td>clientId <span class="required">required</span></td>
+                            <td>string</td>
+                            <td>Client ID that the key belongs to</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="response">
+                    <div class="parameter-title">Response (200 OK):</div>
+                    <pre><code>{
+  "keyId": "string",          // Key ID
+  "isActive": true,           // Activation status
+  "expirationDate": "string"  // Expiration date
+}</code></pre>
+                </div>
+                
+                <div class="response">
+                    <div class="parameter-title">Response (404 Not Found):</div>
+                    <pre><code>{
+  "message": "Key not found"
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Endpoint: Refresh key -->
+        <div class="endpoint">
+            <div class="endpoint-header" onclick="toggleEndpoint('refresh')">
+                <div class="method post">POST</div>
+                <div class="path">/keys/refresh</div>
+                <div class="description">Refresh key expiration</div>
+                <button class="toggle-btn">▼</button>
+            </div>
+            <div class="endpoint-content" id="refresh">
+                <p>Refreshes the expiration date of a license key for an additional period.</p>
+                
+                <div class="parameters">
+                    <div class="parameter-title">Request Parameters (JSON):</div>
+                    <pre><code>{
+  "keyId": "string",    // Key ID
+  "clientId": "string"  // Client ID
+}</code></pre>
+                </div>
+                
+                <div class="response">
+                    <div class="parameter-title">Response (200 OK):</div>
+                    <pre><code>{
+  "keyId": "string",          // Key ID
+  "refreshDate": "string",    // Refresh date
+  "expirationDate": "string"  // New expiration date
+}</code></pre>
+                </div>
+                
+                <div class="response">
+                    <div class="parameter-title">Response (404 Not Found):</div>
+                    <pre><code>{
+  "message": "Key not found"
+}</code></pre>
+                </div>
+                
+                <div class="response">
+                    <div class="parameter-title">Response (400 Bad Request):</div>
+                    <pre><code>{
+  "message": "Key is not active"
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Endpoint: Get all keys (admin) -->
+        <div class="endpoint">
+            <div class="endpoint-header" onclick="toggleEndpoint('getAll')">
+                <div class="method get">GET</div>
+                <div class="path">/admin/keys</div>
+                <div class="description">Get all keys (admin)</div>
+                <button class="toggle-btn">▼</button>
+            </div>
+            <div class="endpoint-content" id="getAll">
+                <p>Retrieves a list of all keys in the system. Available only to administrators.</p>
+                
+                <div class="parameters">
+                    <div class="parameter-title">Headers:</div>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td>x-auth-token <span class="required">required</span></td>
+                            <td>JWT authentication token</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="response">
+                    <div class="parameter-title">Response (200 OK):</div>
+                    <pre><code>[
+  {
+    "_id": "string",
+    "keyId": "string",
+    "clientId": "string",
+    "isActive": boolean,
+    "activationDate": "string",
+    "expirationDate": "string",
+    "lastRefresh": "string",
+    "createdBy": "string",
+    "createdAt": "string"
+  },
+  // ...
+]</code></pre>
+                </div>
+                
+                

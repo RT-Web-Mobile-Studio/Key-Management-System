@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2a4494;
+            --secondary-color: #4682B4;
+            --dark-color: #343a40;
+            --light-color: #f4f4f4;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            background-color: #fff;
+            color: #333;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #666;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .text-primary {
+            color: var(--primary-color);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.7rem 2rem;
+            z-index: 1;
+            width: 100%;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .navbar ul {
+            display: flex;
+        }
+
+        .navbar a {
+            color: #fff;
+            padding: 0.45rem;
+            margin: 0 0.25rem;
+        }
+
+        .navbar a:hover {
+            color: var(--light-color);
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 2rem auto;
+            overflow: hidden;
+            padding: 0 2rem;
+        }
+
+        .form-container h1 {
+            text-align: center;
+        }
+
+        .form-group {
+            margin: 1.2rem 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            display: block;
+            width: 100%;
+            padding: 0.4rem;
+            font-size: 1.2rem;
+            border: 1px solid #ccc;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--light-color);
+            color: #333;
+            padding: 0.4rem 1.3rem;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            transition: opacity 0.2s ease-in;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: #fff;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: #fff;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: #fff;
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .btn-sm {
+            font-size: 0.8rem;
+            padding: 0.3rem 1rem;
+            margin-right: 0.2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        table th,
+        table td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        table th {
+            background: var(--light-color);
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            padding: 0.2rem 0.7rem;
+            text-align: center;
+            margin: 0.3rem;
+            background: var(--light-color);
+            color: #333;
+            border-radius: 5px;
+        }
+
+        .badge-success {
+            background: var(--success-color);
+            color: #fff;
+        }
+
+        .badge-danger {
+            background: var(--danger-color);
+            color: #fff;
+        }
+
+        .ml-2 {
+            margin-left: 0.5rem;
+        }
+
+        /* View toggling */
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                display: block;
+                text-align: center;
+            }
+
+            .navbar ul {
+                text-align: center;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>
+            <a href="#!" onclick="switchView('home-view')">
+                <i class="fas fa-key"></i> Key Management
+            </a>
+        </h1>
+        <ul id="nav-links">
+            <!-- Will be populated based on auth state -->
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- Home View -->
+        <div id="home-view" class="view active">
+            <h1 class="text-primary">Key Management Dashboard</h1>
+            <p>Please log in to manage your license keys.</p>
+        </div>
+
+        <!-- Login View -->
+        <div id="login-view" class="view">
+            <div class="form-container">
+                <h1>Account Login</h1>
+                <form>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" id="username" placeholder="Try 'admin'" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="password" placeholder="Try 'password123'" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Login" class="btn btn-primary btn-block">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Register View -->
+        <div id="register-view" class="view">
+            <div class="form-container">
+                <h1>Account Registration</h1>
+                <form>
+                    <div class="form-group">
+                        <label for="reg-username">Username</label>
+                        <input type="text" name="username" id="reg-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" name="password" id="reg-password" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="password2">Confirm Password</label>
+                        <input type="password" name="password2" id="password2" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="adminCode">Admin Code (optional)</label>
+                        <input type="text" name="adminCode" id="adminCode">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Register" class="btn btn-primary btn-block">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- KeyList View -->
+        <div id="key-list-view" class="view">
+            <h1>License Keys</h1>
+            <a href="#!" onclick="switchView('key-form-view')" class="btn btn-primary">
+                Add New Key
+            </a>
+            
+            <div id="key-table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Key ID</th>
+                            <th>Client ID</th>
+                            <th>Status</th>
+                            <th>Activation Date</th>
+                            <th>Expiration Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Key 1 -->
+                        <tr>
+                            <td>KEY-123456</td>
+                            <td>CLIENT-A01</td>
+                            <td>
+                                <span class="badge badge-success">Active</span>
+                                <button class="btn btn-sm btn-secondary ml-2" onclick="toggleKeyStatus(this)">
+                                    Deactivate
+                                </button>
+                            </td>
+                            <td>Feb 15, 2025</td>
+                            <td>Mar 15, 2025</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick="confirmDelete('KEY-123456')">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Key 2 -->
+                        <tr>
+                            <td>KEY-234567</td>
+                            <td>CLIENT-B02</td>
+                            <td>
+                                <span class="badge badge-danger">Inactive</span>
+                                <button class="btn btn-sm btn-secondary ml-2" onclick="toggleKeyStatus(this)">
+                                    Activate
+                                </button>
+                            </td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick="confirmDelete('KEY-234567')">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Key 3 -->
+                        <tr>
+                            <td>KEY-345678</td>
+                            <td>CLIENT-C03</td>
+                            <td>
+                                <span class="badge badge-success">Active</span>
+                                <button class="btn btn-sm btn-secondary ml-2" onclick="toggleKeyStatus(this)">
+                                    Deactivate
+                                </button>
+                            </td>
+                            <td>Feb 10, 2025</td>
+                            <td>Mar 10, 2025</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick="confirmDelete('KEY-345678')">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Key 4 -->
+                        <tr>
+                            <td>KEY-456789</td>
+                            <td>CLIENT-D04</td>
+                            <td>
+                                <span class="badge badge-danger">Inactive</span>
+                                <button class="btn btn-sm btn-secondary ml-2" onclick="toggleKeyStatus(this)">
+                                    Activate
+                                </button>
+                            </td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick="confirmDelete('KEY-456789')">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- KeyForm View -->
+        <div id="key-form-view" class="view">
+            <div class="form-container">
+                <h2 class="text-primary">Add Key</h2>
+                <form>
+                    <div class="form-group">
+                        <label for="keyId">Key ID</label>
+                        <input type="text" placeholder="Key ID" name="keyId" id="keyId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientId">Client ID</label>
+                        <input type="text" placeholder="Client ID" name="clientId" id="clientId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="isActive">Status</label>
+                        <select name="isActive" id="isActive">
+                            <option value="false">Inactive</option>
+                            <option value="true">Active</option>
+                        </select>
+                    </div>
+                    <div>
+                        <input type="submit" value="Add Key" class="btn btn-primary btn-block">
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-light btn-block" onclick="switchView('key-list-view'); return false;">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer style="background-color: var(--dark-color); color: white; text-align: center; padding: 1rem 0; margin-top: 2rem;">
+        <div class="container">
+            <p>This is a mocked demo of proposal by Roman Tsisyk</p>
+            <p>&copy; 2025 Key Management System</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simulate authentication state
+        let isAuthenticated = false;
+        let currentUser = null;
+
+        // Initialize the UI
+        function initUI() {
+            updateNavLinks();
+            checkAuthState();
+        }
+
+        // Update navigation links based on auth state
+        function updateNavLinks() {
+            const navLinks = document.getElementById('nav-links');
+            navLinks.innerHTML = '';
+
+            if (isAuthenticated) {
+                // Auth links
+                navLinks.innerHTML = `
+                    <li>Hello ${currentUser ? currentUser.username : 'User'}!</li>
+                    <li><a href="#!" onclick="switchView('key-list-view')">Keys</a></li>
+                    <li><a href="#!" onclick="logout()"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+                `;
+            } else {
+                // Guest links
+                navLinks.innerHTML = `
+                    <li><a href="#!" onclick="switchView('register-view')">Register</a></li>
+                    <li><a href="#!" onclick="switchView('login-view')">Login</a></li>
+                `;
+            }
+        }
+
+        // Check authentication state and update UI
+        function checkAuthState() {
+            if (isAuthenticated) {
+                switchView('key-list-view');
+            } else {
+                switchView('home-view');
+            }
+        }
+
+        // Switch between views
+        function switchView(viewId) {
+            const views = document.querySelectorAll('.view');
+            views.forEach(view => {
+                view.classList.remove('active');
+            });
+
+            document.getElementById(viewId).classList.add('active');
+            return false;
+        }
+
+        // Mock login function
+        function login(username, password) {
+            // In a real app, this would call the backend
+            isAuthenticated = true;
+            currentUser = { username: username, isAdmin: true };
+            updateNavLinks();
+            checkAuthState();
+        }
+
+        // Mock logout function
+        function logout() {
+            isAuthenticated = false;
+            currentUser = null;
+            updateNavLinks();
+            checkAuthState();
+        }
+
+        // Toggle key status
+        function toggleKeyStatus(button) {
+            const statusCell = button.parentElement;
+            const statusBadge = statusCell.querySelector('.badge');
+            
+            if (statusBadge.classList.contains('badge-success')) {
+                statusBadge.classList.remove('badge-success');
+                statusBadge.classList.add('badge-danger');
+                statusBadge.textContent = 'Inactive';
+                button.textContent = 'Activate';
+            } else {
+                statusBadge.classList.remove('badge-danger');
+                statusBadge.classList.add('badge-success');
+                statusBadge.textContent = 'Active';
+                button.textContent = 'Deactivate';
+            }
+        }
+
+        // Confirm key deletion
+        function confirmDelete(keyId) {
+            if (confirm(`Are you sure you want to delete key ${keyId}?`)) {
+                // This would call the API in a real app
+                alert(`Key ${keyId} deleted.`);
+                // Here we would remove the row from the table
+            }
+        }
+
+        // Set up event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Login form submission
+            const loginForm = document.querySelector('#login-view form');
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                login(username, password);
+            });
+
+            // Register form submission
+            const registerForm = document.querySelector('#register-view form');
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('reg-username').value;
+                const password = document.getElementById('reg-password').value;
+                const password2 = document.getElementById('password2').value;
+                
+                if (password !== password2) {
+                    alert('Passwords do not match');
+                    return;
+                }
+                
+                // This would call the API in a real app
+                alert('Registration successful! You can now log in.');
+                switchView('login-view');
+            });
+
+            // Add key form submission
+            const keyForm = document.querySelector('#key-form-view form');
+            keyForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const keyId = document.getElementById('keyId').value;
+                const clientId = document.getElementById('clientId').value;
+                const isActive = document.getElementById('isActive').value;
+                
+                // This would call the API in a real app
+                alert(`Key ${keyId} added for client ${clientId}.`);
+                switchView('key-list-view');
+            });
+
+            // Initialize the UI
+            initUI();
+
+            // For demo purposes, auto-login
+            // Uncomment the next line to start authenticated
+            // login('admin', 'password');
+        });
+    </script>
+</body>
+</html>
