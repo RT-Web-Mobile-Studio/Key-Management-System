@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Management System - Technical Proposal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2a4494;
+            --secondary-color: #4682B4;
+            --dark-color: #343a40;
+            --light-color: #f4f4f4;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #666;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .text-primary {
+            color: var(--primary-color);
+        }
+
+        .text-secondary {
+            color: var(--secondary-color);
+        }
+
+        .text-dark {
+            color: var(--dark-color);
+        }
+
+        .text-success {
+            color: var(--success-color);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.7rem 2rem;
+            z-index: 1;
+            width: 100%;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .navbar h1 {
+            margin: 0;
+        }
+
+        .navbar a {
+            color: #fff;
+            padding: 0.45rem;
+            margin: 0 0.25rem;
+        }
+
+        .navbar a:hover {
+            color: var(--light-color);
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-heading {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--light-color);
+            color: #333;
+            padding: 0.6rem 1.3rem;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            transition: opacity 0.2s ease-in;
+            outline: none;
+            border-radius: 4px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        table th,
+        table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        table th {
+            background: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .lead {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .my-2 {
+            margin: 2rem 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 1.5rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 1.5rem;
+        }
+
+        .tech-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .stage {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+
+        .stage-number {
+            background: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+
+        .stage-content {
+            flex-grow: 1;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .folder-structure {
+            font-family: monospace;
+            line-height: 1.5;
+        }
+
+        .price-tag {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .price-detail {
+            font-size: 1rem;
+            color: #666;
+            text-align: center;
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .hide-sm {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>
+            <i class="fas fa-key"></i> Key Management System
+        </h1>
+        <div>
+            <a href="#" class="btn">Demo</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="section">
+            <h1 class="section-heading">Technical Proposal</h1>
+            <p class="lead">Development of a modern license key management system with modular architecture, robust security, and intuitive interfaces for administrators and end-users.</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-heading">Technology Stack</h2>
+            <div class="grid-3">
+                <div class="card text-center">
+                    <i class="fab fa-react tech-icon"></i>
+                    <h3>Frontend</h3>
+                    <p>React.js with Context API for state management</p>
+                </div>
+                <div class="card text-center">
+                    <i class="fab fa-node-js tech-icon"></i>
+                    <h3>Backend</h3>
+                    <p>Node.js with Express.js</p>
+                </div>
+                <div class="card text-center">
+                    <i class="fas fa-database tech-icon"></i>
+                    <h3>Database</h3>
+                    <p>MongoDB</p>
+                </div>
+                <div class="card text-center">
+                    <i class="fas fa-key tech-icon"></i>
+                    <h3>Authentication</h3>
+                    <p>JWT tokens</p>
+                </div>
+                <div class="card text-center">
+                    <i class="fab fa-microsoft tech-icon"></i>
+                    <h3>Infrastructure</h3>
+                    <p>Azure (App Service, Static Web Apps, Cosmos DB)</p>
+                </div>
+                <div class="card text-center">
+                    <i class="fas fa-code-branch tech-icon"></i>
+                    <h3>CI/CD</h3>
+                    <p>Azure DevOps Pipelines</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-heading">System Architecture</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <h3><i class="fas fa-server"></i> Server API</h3>
+                    <ul>
+                        <li>RESTful endpoints for all key operations</li>
+                        <li>Separate routes for administrators and clients</li>
+                        <li>JWT authentication with roles</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-desktop"></i> Admin Dashboard</h3>
+                    <ul>
+                        <li>Intuitive key management interface</li>
+                        <li>Creation, activation, viewing, and revocation of keys</li>
+                        <li>Key status and expiration monitoring</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-plug"></i> Client Integration</h3>
+                    <ul>
+                        <li>Simple SDK for integration with client applications</li>
+                        <li>Endpoints for key activation and validation</li>
+                        <li>Integration documentation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-heading">Project Structure</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3 class="card-header">Backend</h3>
+                    <pre class="folder-structure">backend/
+  ├── server.js                  # Main server file
+  ├── config/                    # Configuration
+  │   └── db.js                  # DB and JWT settings
+  ├── models/                    # Data models
+  │   ├── User.js                # User model
+  │   └── Key.js                 # License key model
+  ├── routes/                    # API routes
+  │   ├── auth.js                # Authentication routes
+  │   ├── keys.js                # Public key routes
+  │   └── admin.js               # Admin key routes
+  ├── middleware/                # Middleware
+  │   └── auth.js                # JWT verification
+  └── package.json               # Project dependencies</pre>
+                </div>
+                <div class="card">
+                    <h3 class="card-header">Frontend</h3>
+                    <pre class="folder-structure">frontend/
+  ├── public/                    # Static files
+  │   └── index.html
+  ├── src/
+  │   ├── App.js                 # Main component
+  │   ├── index.js               # Entry point
+  │   ├── components/            # React components
+  │   │   ├── layout/            # Layout components
+  │   │   ├── auth/              # Authentication components
+  │   │   └── keys/              # Key management components
+  │   ├── context/               # State management
+  │   │   ├── auth/              # Authentication context
+  │   │   └── keys/              # Keys context
+  │   └── utils/                 # Utility functions
+  └── package.json               # Project dependencies</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-heading">Implementation Plan</h2>
+            <div class="stage">
+                <div class="stage-number">1</div>
+                <div class="stage-content">
+                    <h3>Core Functionality (4 days)</h3>
+                    <ul>
+                        <li>Backend development with data models and API</li>
+                        <li>Basic frontend implementation</li>
+                        <li>Security and authentication setup</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="stage">
+                <div class="stage-number">2</div>
+                <div class="stage-content">
+                    <h3>Security and Extended Functionality (3 days)</h3>
+                    <ul>
+                        <li>JWT authentication integration</li>
+                        <li>Roles and permissions implementation</li>
+                        <li>API extension for client applications</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="stage">
+                <div class="stage-number">3</div>
+                <div class="stage-content">
+                    <h3>Deployment and CI/CD (3 days)</h3>
+                    <ul>
+                        <li>Azure infrastructure setup</li>
+                        <li>Azure DevOps Pipelines implementation</li>
+                        <li>Testing and optimization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-heading">Infrastructure Cost Estimate</h2>
+            <div class="card">
+                <h3 class="card-header">Monthly Infrastructure Costs</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Description</th>
+                            <th>Cost/month</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>App Service (B1)</td>
+                            <td>Backend Hosting</td>
+                            <td>$54</td>
+                        </tr>
+                        <tr>
+                            <td>Cosmos DB (MongoDB API)</td>
+                            <td>Database</td>
+                            <td>$25</td>
+                        </tr>
+                        <tr>
+                            <td>Azure Static Web Apps</td>
+                            <td>Frontend Hosting</td>
+                            <td>$9</td>
+                        </tr>
+                        <tr>
+                            <td>Azure DevOps</td>
+                            <td>CI/CD Pipeline</td>
+                            <td>$6</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td></td>
+                            <td><strong>$94</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="price-tag">$94</div>
+                <div class="price-detail">Monthly Infrastructure Cost</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-heading">Support Options</h2>
+            <div class="grid-2">
+                <div class="card text-center">
+                    <i class="fas fa-headset tech-icon"></i>
+                    <h3>Basic Technical Support</h3>
+                    <p>Includes incident response, consultations, and minor fixes</p>
+                    <div class="price-tag">200 PLN/month</div>
+                    <p>4 hours/month</p>
+                </div>
+                <div class="card text-center">
+                    <i class="fas fa-tools tech-icon"></i>
+                    <h3>Extended Support and Updates</h3>
+                    <p>Includes regular updates, feature extensions, and technical monitoring</p>
+                    <div class="price-tag">Custom Quote</div>
+                    <p>Based on specific requirements</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-heading">Solution Benefits</h2>
+            <div class="grid-3">
+                <div class="card text-center">
+                    <i class="fas fa-chart-line tech-icon"></i>
+                    <h3>Scalability</h3>
+                    <p>Architecture for various load volumes</p>
+                </div>
+                <div class="card text-center">
+                    <i class="fas fa-shield-alt tech-icon"></i>
+                    <h3>Security</h3>
+                    <p>Secure key storage and processing</p>
+                </div>
+                <div class="card text-center">
+                    <i class="fas fa-rocket tech-icon"></i>
+                    <h3>Automation</h3>
+                    <p>Automated CI/CD process</p>
+                </div>
+                <div class="card text-center">
+                    <i class="fas fa-puzzle-piece tech-icon"></i>
+                    <h3>Integration</h3>
+                    <p>Easy integration with existing products</p>
+                </div>
+                <div class="card text-center">
+                    <i class="fas fa-coins tech-icon"></i>
+                    <h3>Cost</h3>
+                    <p>Low maintenance costs</p>
+                </div>
+                <div class="card text-center">
+                    <i class="fas fa-tachometer-alt tech-icon"></i>
+                    <h3>Performance</h3>
+                    <p>Optimized system performance</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center my-2">
+            <a href="#" class="btn btn-primary">Request Full Proposal</a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>This is a mockup demo proposal by Roman Tsisyk</p>
+            <p>&copy; 2025 Key Management System</p>
+        </div>
+    </footer>
+
+    <script>
+        // Any needed JavaScript can be added here
+    </script>
+</body>
+</html>
